@@ -62,6 +62,10 @@ public class Diagramme {
 	public void setNoeuds(ArrayList<Bean> noeuds) {
 		this.noeuds = noeuds;
 	}
+	public static void main(String[] args) {
+		Diagramme d = new Diagramme("c:\\Users\\guest\\workspace\\archiLogiciel\\bin\\");
+		// System.out.println(d.getTab());
+	}
 
 }
 
