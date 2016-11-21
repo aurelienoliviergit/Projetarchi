@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Diagramme {
 
 	private int[][] tab;
-	private ArrayList<Bean> noeuds;
+	private ArrayList<Class> noeuds;
 	public static final int Implement = 2;
 	public static final int Extends = 1;
 	
@@ -18,23 +18,48 @@ public class Diagramme {
 		this(new File(path));
 	}
 
+	
+	
 	public Diagramme(File path) {
 
-		String[] listefichiers;
-		listefichiers = path.list();
-
-		URL[] cp = new URL[1];
-		try {
-			cp[0] = path.toURL();
-			System.out.println(cp[0]);
-		} catch (MalformedURLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		
+		ClassLoader urlcl=Lecture(path);
+		
+		
+		// La méthode classesAlire doit retourner une Liste(ou arbre) contenant les noms des 
+		// classes et interfaces du projet
+		ArrayList<String> Listestring= this.classesAlire();
+		
+		
+		
+		// Cette boucle ajoute toutes les classe du projets dans l'ArrayList noeuds
+		for ( int i=0; i<Listestring.size();i++){
+			this.noeuds.add(ajoutType(urlcl,Listestring.get(i)));
+           this.ajoutTypetab(this.noeuds.get(i));
 		}
-		ClassLoader urlcl = new URLClassLoader(cp);
-		Class c;
+	
+		
+		
+		// Creer le tableau contenant les classes et leurs relations
+  this.tab=new int[Listestring.size()][Listestring.size()];
+		
+	
+	
+	
+	}
+	
+	
+	
+	
+	public Class ajoutType(ClassLoader urlcl,String st){
+		
+		
+		
+		Class c=null;
 		try {
-			c = urlcl.loadClass("session1.demo.NatDecimal");
+			c = urlcl.loadClass(st);
+
+			//c = urlcl.loadClass("session1.demo.NatDecimal");
 
 			// c=urlcl.loadClass(listefichiers[i].substring(0,
 			// listefichiers[i].length() - 5));
@@ -45,16 +70,46 @@ public class Diagramme {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return c;
 	}
-
-	public void ajoutType(Bean a) {
-		this.noeuds.add(a);
+	
+	
+	
+	public ClassLoader Lecture (File path){
+		URL[] cp = new URL[1];
+		try {
+			cp[0] = path.toURL();
+			System.out.println(cp[0]);
+		} catch (MalformedURLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		ClassLoader urlcl = new URLClassLoader(cp);
+		return urlcl;
 	}
+	
+	public ArrayList<String> classesAlire(){
+		
+    return null;
+		
+		
+	}
+	public void ajoutTypetab(Class a) {
+	// ajoute la class au diagramme en indiquant ses relations aux autres class
+	}
+	
+	
+	
 	public void decrireType(){
 	
 	}
 		
-	
+	public void insererDiagramme(){
+		
+	}
+	public void etiquetterDiagramme(){
+		
+	}
 	
 	
 	
@@ -66,17 +121,53 @@ public class Diagramme {
 		this.tab = tab;
 	}
 
-	public ArrayList<Bean> getNoeuds() {
+	public ArrayList<Class> getNoeuds() {
 		return noeuds;
 	}
 
-	public void setNoeuds(ArrayList<Bean> noeuds) {
+	public void setNoeuds(ArrayList<Class> noeuds) {
 		this.noeuds = noeuds;
 	}
+	
+
+public void insererDiagramme(Diagramme d){
+}
+
+
+	
+	
+	
+	
 	public static void main(String[] args) {
 		Diagramme d = new Diagramme("c:\\Users\\guest\\workspace\\archiLogiciel\\bin\\");
 		// System.out.println(d.getTab());
-	}
+		
+		
+		URL[] cp = new URL[1];
+		File path=new File("c:\\Users\\guest\\workspace\\archiLogiciel\\bin\\");
+		try {
+			cp[0] = path.toURL();
+			System.out.println(cp[0]);
+		} catch (MalformedURLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		ClassLoader urlcl = new URLClassLoader(cp);	
+	Class c;
+	try {
+		
 
+		c = urlcl.loadClass("session1.demo.NatDecimal");
+
+		// c=urlcl.loadClass(listefichiers[i].substring(0,
+		// listefichiers[i].length() - 5));
+		for(int i=0;i<c.getMethods().length;i++){
+			System.out.println(c.getMethods()[i].getName());
+		}
+	} catch (ClassNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 }
 
+}

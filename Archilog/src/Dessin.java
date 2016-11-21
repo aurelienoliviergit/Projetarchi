@@ -6,8 +6,6 @@ private int epaisseurtrait;
 private int couleur;
 private int formesboites;
 private int formefleches;
-private ArrayList<Diagramme> Liste;
-private int[][] graphique;
 
 public Dessin(int ep, int c, int fb, int ff){
 	
@@ -15,7 +13,6 @@ public Dessin(int ep, int c, int fb, int ff){
 	this.couleur=c;
 	this.formesboites=fb;
 	this.formefleches=ff;
-	this.Liste=new ArrayList<Diagramme>();
 
 }
 
@@ -53,24 +50,7 @@ public void setFormefleches(int formefleches) {
 
 
 
-// Créer un graphique de taille( en pixels) égale au nombre de types dans le programme
-public void setGraphique(){
-	int n=0;
-	for (int i=0; i<this.Liste.size() ;i++){
-		n=n+this.Liste.get(i).getNoeuds().size();
-		
-	}
-	this.graphique=new int[n][n];
-}
-public void addDiagramme(Diagramme d){
-	this.Liste.add(d);
-}
-public void insererDiagramme(){
-	
-}
-public void etiquetterDiagramme(){
-	
-}
+
 
 public static void main(String[] args) {
 	
@@ -81,7 +61,7 @@ public static void main(String[] args) {
 		Dessin SVG=new Dessin(epaisseurtrait,couleur,formeboites,formefleches);
 
 	Diagramme d = new Diagramme("c:\\Users\\guest\\workspace\\archiLogiciel\\bin\\");
-	SVG.addDiagramme(d);
+	
 
 	
 	
