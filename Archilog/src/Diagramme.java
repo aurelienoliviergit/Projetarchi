@@ -47,6 +47,17 @@ public class Diagramme {
 		}
 	}
 
+	public void ajoutType(Bean a) {
+		this.noeuds.add(a);
+	}
+	public void decrireType(){
+	
+	}
+		
+	
+	
+	
+	
 	public int[][] getTab() {
 		return tab;
 	}
