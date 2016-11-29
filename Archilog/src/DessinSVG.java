@@ -9,13 +9,7 @@ public class DessinSVG implements Dessin{
 		
 	}
 
-	@Override
-	public void dessinercadre(Class a) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
+	
 	public void dessinerMethode(Method m) {
 		// TODO Auto-generated method stub
 		
