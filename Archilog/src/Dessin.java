@@ -6,6 +6,8 @@ private int epaisseurtrait;
 private int couleur;
 private int formesboites;
 private int formefleches;
+private Diagramme d;
+
 
 public Dessin(int ep, int c, int fb, int ff){
 	
@@ -43,6 +45,9 @@ public void setFormesboites(int formesboites) {
 public int getFormefleches() {
 	return formefleches;
 }
+public void setDiagramme(Diagramme d){
+	this.d=d;
+}
 
 public void setFormefleches(int formefleches) {
 	this.formefleches = formefleches;
@@ -58,10 +63,10 @@ public static void main(String[] args) {
 	int couleur=1;
 	 int formeboites=1;
 	 int formefleches=1;
-		Dessin SVG=new Dessin(epaisseurtrait,couleur,formeboites,formefleches);
+		Dessin draw=new Dessin(epaisseurtrait,couleur,formeboites,formefleches);
 
 	Diagramme d = new Diagramme("c:\\Users\\guest\\workspace\\archiLogiciel\\bin\\");
-	
+	draw.setDiagramme(d);
 
 	
 	

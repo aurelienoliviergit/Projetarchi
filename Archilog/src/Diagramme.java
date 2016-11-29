@@ -34,7 +34,7 @@ public class Diagramme {
 		
 		// Cette boucle ajoute toutes les classe du projets dans l'ArrayList noeuds
 		for ( int i=0; i<Listestring.size();i++){
-			this.noeuds.add(ajoutType(urlcl,Listestring.get(i)));
+			this.noeuds.add(ajoutType0(urlcl,Listestring.get(i)));
            this.ajoutTypetab(this.noeuds.get(i));
 		}
 	
@@ -49,9 +49,22 @@ public class Diagramme {
 	}
 	
 	
+	public void ajoutType(){
+		
+		
+for ( int i=1; i<this.noeuds.size();i++){
+
 	
 	
-	public Class ajoutType(ClassLoader urlcl,String st){
+}	
+	
+
+
+	}
+	
+	
+	
+	public Class ajoutType0(ClassLoader urlcl,String st){
 		
 		
 		
