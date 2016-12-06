@@ -23,6 +23,6 @@ public interface Dessin {
 	}
 	public void dessinerMethode(Method m);
 	public void placercadre();
-	public void lier(Class a,int[][] t, int i);
+	public void lier(Diagramme d);
 	
 }
