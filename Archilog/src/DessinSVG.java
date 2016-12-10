@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 
-public class DessinSVG {
+public class DessinSVG implements Dessin{
 	
 	private SVGGraphics2D graph; 		// Dessin 2D ou svg du diagramme
 	private ArrayList<Integer> x;		//tableau des abcisses  de tout les rectangles des classes
@@ -87,7 +87,7 @@ public class DessinSVG {
 		int nbreAttribut = b.getFields().length; // nombre d'attribut dans la classe b
 		int nbreMethod = b.getMethods().length; 	 // nombre de méthodes dans la classe b
 		
-		int dimX = b.tailleDuPlusLongMot()+20 ;		  // dimension en abcisse du rectangle de la classe b, on a ajouté 20 par soucis de clarté
+		int dimX = DessinSVG.pluslongmot(b)+20 ;		  // dimension en abcisse du rectangle de la classe b, on a ajouté 20 par soucis de clarté
 		this.getDimX().add(dimX);
 		
 		int dimY= nbreAttribut*12+nbreMethod*12+3*12; // dimension en ordonné du rectangle de la classe b, 12 étant taille du texte
@@ -95,8 +95,8 @@ public class DessinSVG {
 		
 		this.getGraph().draw(new Rectangle(x, y, dimX , dimY)); // dessin du rectangle
 		
-		int nbrElement = 1; //nbrElement est un repere pour savoir combien d'element on deja ete dessine dans le rectangle
-		this.getGraph().drawString(b.getName(), x+10, y +12*(nbrElement)); // ecrire le nom de la methode dans le cadre
+		int nbrElement = 1; //nbrElement est un repère pour savoir combien d'element on deja été dessiné dans le rectangle
+		this.getGraph().drawString(b.getName(), x+10, y +12*(nbrElement)); // écrire le nom de la méthode dans le cadre
 		nbrElement++;
 		
 		// ecrire dans le cadre de la classe b les attributs
@@ -115,7 +115,7 @@ public class DessinSVG {
 	}
 
 //Dessine les flèches entre les classes ayant des liens d'extends et d'implements	
-	public void dessinerFleche(Diagramme d){
+	public void lier(Diagramme d){
 		
 		for(int i = 0; i < d.getTab().length; i++){
 			for(int j = 0; j < d.getTab()[0].length; j++){ // parcour du tableau des relations du diagramme
@@ -180,6 +180,22 @@ public class DessinSVG {
 		}
 		return t;
 	}
+
+	//retourne la taille du mot le plus long à écrire de la classe b
+	public static int pluslongmot(Class b){
+		int tailleDuPlusLongMot = b.getName().length();
+		for(int i = 0; i<b.getFields().length; i++){
+			if((b.getFields()[i].getName() + "" + b.getFields()[i].getType().getName()).length() > tailleDuPlusLongMot){
+				tailleDuPlusLongMot = (b.getFields()[i].getName() + "" + b.getFields()[i].getType().getName()).length();
+			}
+		}
+		for(int i = 0; i<b.getMethods().length; i++){
+			if((b.getMethods()[i].getName() + "" + b.getMethods()[i].getReturnType().getName()).length() > tailleDuPlusLongMot){
+				tailleDuPlusLongMot = (b.getMethods()[i].getName() + "" + b.getMethods()[i].getReturnType().getName()).length();
+			}
+		}
+		return tailleDuPlusLongMot;
+	}
 	
 	public static void main(String[] args) {
 		/*SVGGraphics2D g2 = new SVGGraphics2D(300, 200);
@@ -206,7 +222,7 @@ public class DessinSVG {
         int j = scan.nextInt();
 		 
 		DessinSVG d = new DessinSVG(i,j); //Dessine le cadre de taille (i,j)
-		d.dessinerClass(null); //on dessine dans d l'ensemble des classes représentées par b qui est du type Bean[]
+		d.dessinerClass(null); //on dessine dans d l'ensemble des classes représentées par un objet de type Diagramme
 		 
 		 
 	}
