@@ -9,11 +9,11 @@ import org.jfree.graphics2d.svg.SVGGraphics2D;
 
 public class DessinSVG {
 	
-	private SVGGraphics2D graph; // Dessin 2D ou svg du diagramme
-	private ArrayList<Integer> x; 
-	private ArrayList<Integer> y; 
-	private ArrayList<Integer> dimX; 
-	private ArrayList<Integer> dimY; 
+	private SVGGraphics2D graph; 		// Dessin 2D ou svg du diagramme
+	private ArrayList<Integer> x;		//tableau des abcisses  de tout les rectangles des classes
+	private ArrayList<Integer> y;		//tableau des ordonnés  de tout les rectangles des classes 	
+	private ArrayList<Integer> dimX;	//tableau des dimension en abcisse de tout les rectangles des classes
+	private ArrayList<Integer> dimY;	//tableau des dimension en ordonné de tout les rectangles des classes
 	
 	public SVGGraphics2D getGraph() {
 		return graph;
@@ -113,18 +113,19 @@ public class DessinSVG {
 			nbrElement++;
 		}
 	}
-	
-	
+
+//Dessine les flèches entre les classes ayant des liens d'extends et d'implements	
 	public void dessinerFleche(Diagramme d){
 		
 		for(int i = 0; i < d.getTab().length; i++){
-			for(int j = 0; j < d.getTab()[0].length; j++){
-				if(d.getTab()[i][j]==1){
+			for(int j = 0; j < d.getTab()[0].length; j++){ // parcour du tableau des relations du diagramme
+				if(d.getTab()[i][j]==1){ //si i extends j
 					int [] t= this.pointLier(i, j);
 					this.getGraph().drawLine(t[0], t[1], t[2], t[3]);
 				}
-				if(d.getTab()[i][j]==1){
-					
+				if(d.getTab()[i][j]==2){ // si i implements j
+					int [] t= this.pointLier(i, j);
+					this.getGraph().drawLine(t[0], t[1], t[2], t[3]);
 				}
 			}
 		}
@@ -133,13 +134,51 @@ public class DessinSVG {
 		
 	}
 	
-	
+// donne les coordonnées des 2 points à lier 
 	public int[] pointLier(int i, int j){
-		int deltaX = this.getX().get(i)-this.getX().get(i);
-		int deltaY = this.getY().get(i)-this.getY().get(i);
+		int[] t = new int[4]; // tableau des coordonnées à lier
+		int deltaX = this.getX().get(i)-this.getX().get(j);
+		int deltaY = this.getY().get(i)-this.getY().get(j);
 		
-		return null;
+		int x1 = this.getX().get(i);
+		int y1 = this.getY().get(i);
+		int dimx1 = this.getDimX().get(i);
+		int dimy1 = this.getDimY().get(i);
+		int x2 = this.getX().get(j);
+		int y2 = this.getY().get(j);
+		int dimx2 = this.getDimX().get(j);
+		int dimy2 = this.getDimY().get(j);
 		
+		
+		if(Math.abs(deltaY) >= Math.abs(deltaX)){
+			if(deltaY<=0){
+				t[0]=x1+dimx1/2;
+				t[1]=y1;
+				t[2]=x2+dimx2/2;
+				t[3]=y2+dimy2;
+			}
+			else{
+				t[0]=x1+dimx1/2;
+				t[1]=y1+dimy1;
+				t[2]=x2+dimx2/2;
+				t[3]=y2;
+			}
+		}
+		else{
+			if(deltaX<=0){
+				t[0]=x1+dimx1;
+				t[1]=y1+dimy1/2;
+				t[2]=x2;
+				t[3]=y2+dimy2/2;
+			}
+			else{
+				t[0]=x1;
+				t[1]=y1+dimy1/2;
+				t[2]=x2+dimx2;
+				t[3]=y2+dimy2/2;
+			}
+		}
+		return t;
 	}
 	
 	public static void main(String[] args) {
