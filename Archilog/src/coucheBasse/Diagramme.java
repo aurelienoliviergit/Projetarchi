@@ -91,7 +91,7 @@ public class Diagramme extends ListeClasses implements RepresentationGraph{
 	public void setTab(int[][] tab) {
 		this.tab = tab;
 	}
-
+	@Override
 	public Class[] getClasses() {
 		return noeuds;
 	}
@@ -110,6 +110,14 @@ public class Diagramme extends ListeClasses implements RepresentationGraph{
 			s += "\n";
 		}
 		System.out.println(s);
+		for(int i=0;i<d.getClasses()[0].getMethods().length;i++){
+			System.out.println(d.getClasses()[0].getMethods()[i].getName());
+		}
+		///*
+		System.out.println("--"+ d.getCleanMethods(0).length);
+		for(int i=0;i<d.getCleanMethods(0).length;i++){
+			System.out.println(d.getCleanMethods(0)[i].getName());
+		}//*/
 	}
 
 	@Override
