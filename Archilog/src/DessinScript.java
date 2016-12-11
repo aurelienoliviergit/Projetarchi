@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import coucheBasse.Diagramme;
 
-public class DessinScript implements Dessin {
+public class DessinScript implements DessinClass, DessinLien {
 private int epaisseurtrait;
 private int couleur;
 private int formesboites;

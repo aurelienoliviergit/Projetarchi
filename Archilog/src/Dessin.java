@@ -1,8 +1,9 @@
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import coucheBasse.Diagramme;
+import coucheBasse.RepresentationProjet;
 
-public interface Dessin {
+public interface Dessin{
 
 	int couleur = 0;
 	/*
@@ -25,8 +26,8 @@ public interface Dessin {
 	}
 	public void dessinerMethode(Method m);
 	public void placercadre();
-	*/
-	public void dessinerClass(Diagramme d);
-	public void lier(Diagramme d);
 	
+	public void dessinerClass(RepresentationProjet d);
+	public void lier(RepresentationProjet d);
+	*/
 }
