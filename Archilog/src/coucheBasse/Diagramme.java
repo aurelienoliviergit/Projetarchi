@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 public class Diagramme extends ListeClasses implements RepresentationGraph{
 
@@ -107,5 +108,29 @@ public class Diagramme extends ListeClasses implements RepresentationGraph{
 		}
 		System.out.println(s);
 	}
+
+	@Override
+	public int getExtends(int i) {
+		int toReturn=-1;
+		for(int p:this.getTab()[i]){
+			if(p==1){
+				toReturn=p;
+			}
+		}
+		return toReturn;
+	}
+
+	@Override
+	public ArrayList<Integer> getImplements(int i) {
+		 ArrayList<Integer> toReturn=new ArrayList<>();
+		for(int p:this.getTab()[i]){
+			if(p==1){
+				toReturn.add(p);
+			}
+		}
+		return toReturn;
+	}
+
+	
 
 }
