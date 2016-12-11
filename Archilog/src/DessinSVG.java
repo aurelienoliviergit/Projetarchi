@@ -7,6 +7,8 @@ import java.util.Scanner;
 
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 
+import Diagramme;
+
 public class DessinSVG {
 	
 	private SVGGraphics2D graph; // Dessin 2D ou svg du diagramme

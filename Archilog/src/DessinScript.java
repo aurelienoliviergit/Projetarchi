@@ -2,6 +2,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import Diagramme;
+
 
 public class DessinScript implements Dessin {
 private int epaisseurtrait;
@@ -68,7 +70,7 @@ public void dessinerAttribut(String f){
 public void lier(Class a,int[][] t, int i){
 	for(int j=0;j<t.length;j++){
 		if(t[i][j]==1){
-	System.out.println("lien de"+i+" à "+j);	
+	System.out.println("lien de"+i+" ï¿½ "+j);	
 		}
 	}
 		
