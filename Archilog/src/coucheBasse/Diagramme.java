@@ -1,0 +1,111 @@
+package coucheBasse;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.Path;
+
+public class Diagramme extends ListeClasses implements RepresentationGraph{
+
+	private int[][] tab;
+	private Class[] noeuds;
+	public static final int Implement = 2;
+	public static final int Extends = 1;
+	public static final int PasDeLien = 0;
+
+	public Diagramme(String path) {
+		this(new File(path).toPath());
+	}
+
+	public Diagramme(Path path) {
+		Extraction e = new Extraction(path);
+		this.setBinaryName(e.getBinaryName());
+		ClassLoader urlcl = Lecture(path);
+		this.noeuds = new Class[e.getNomClasse().size()];
+		this.tab = new int[e.getNomClasse().size()][e.getNomClasse().size()];
+		int i = 0;
+		for (String a : e.getBinaryName()) {
+			this.noeuds[i] = this.ajoutType0(urlcl, a);
+			// remplissage de la matrice avec des zeros
+			for (int j = 0; j < e.getBinaryName().size(); j++) {
+				this.tab[i][j] = PasDeLien;
+			}
+			i++;
+		}
+		this.generateTab();
+	}
+
+	private void generateTab() {
+		String superClass = "";
+		Class[] implemented;
+		int i, j;
+		for (Class c : this.noeuds) {
+			if (c.getGenericSuperclass() != null) {
+				superClass = c.getGenericSuperclass().getTypeName();
+				if ( this.getBinaryName().contains(superClass)) {
+					i =  this.getBinaryName().indexOf(c.getName());
+					j =  this.getBinaryName().indexOf(superClass);
+					this.tab[i][j] = Extends;
+				}
+				implemented = c.getInterfaces();
+				for (Class interf : implemented) {
+					if ( this.getBinaryName().contains(interf.getName())) {
+						i =  this.getBinaryName().indexOf(c.getName());
+						j =  this.getBinaryName().indexOf(interf.getName());
+						this.tab[i][j] = Implement;
+					}
+				}
+			}
+		}
+	}
+
+	public ClassLoader Lecture(Path path) {
+		URL[] cp = new URL[1];
+		try {
+			cp[0] = path.toUri().toURL();
+			System.out.println(cp[0]);
+		} catch (MalformedURLException e1) {
+			e1.printStackTrace();
+		}
+		ClassLoader urlcl = new URLClassLoader(cp);
+		return urlcl;
+	}
+	public Class ajoutType0(ClassLoader urlcl, String st) {
+
+		Class c = null;
+		try {
+			c = urlcl.loadClass(st);
+		} catch (ClassNotFoundException e) {
+			System.out.println(st);
+		}
+		return c;
+	}
+	public int[][] getTab() {
+		return tab;
+	}
+
+	public void setTab(int[][] tab) {
+		this.tab = tab;
+	}
+
+	public Class[] getClasses() {
+		return noeuds;
+	}
+
+	public void setClassess(Class[] noeuds) {
+		this.noeuds = noeuds;
+	}
+
+	public static void main(String[] args) {
+		Diagramme d = new Diagramme("c:\\Users\\guest\\workspace\\PkB\\bin\\");
+		String s = "";
+		for (int i = 0; i < d.getTab().length; i++) {
+			for (int j = 0; j < d.getTab().length; j++) {
+				s += " " + d.getTab()[i][j];
+			}
+			s += "\n";
+		}
+		System.out.println(s);
+	}
+
+}
