@@ -33,7 +33,7 @@ public class Extraction extends ListeClasses implements IExtraction{
 		for (Path p : this.cheminClasse) {
 			s = p.toString();
 			s = s.substring(t + 1, s.length() - 6);
-			s = s.replace('\\', '.');
+			s = s.replace(File.separatorChar, '.');
 			this.getBinaryName().add(s);
 
 		}

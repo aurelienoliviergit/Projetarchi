@@ -23,6 +23,9 @@ public class Diagramme extends ListeClasses implements RepresentationGraph{
 		this.setBinaryName(e.getBinaryName());
 		ClassLoader urlcl = Lecture(path);
 		this.noeuds = new Class[e.getNomClasse().size()];
+		System.out.println(e.getBinaryName());
+		System.out.println(e.getCheminClasse());
+		System.out.println(e.getNomClasse());
 		this.tab = new int[e.getNomClasse().size()][e.getNomClasse().size()];
 		int i = 0;
 		for (String a : e.getBinaryName()) {
@@ -72,7 +75,7 @@ public class Diagramme extends ListeClasses implements RepresentationGraph{
 		return urlcl;
 	}
 	public Class ajoutType0(ClassLoader urlcl, String st) {
-
+		System.out.println(st);
 		Class c = null;
 		try {
 			c = urlcl.loadClass(st);
@@ -98,7 +101,7 @@ public class Diagramme extends ListeClasses implements RepresentationGraph{
 	}
 
 	public static void main(String[] args) {
-		Diagramme d = new Diagramme("c:\\Users\\guest\\workspace\\PkB\\bin\\");
+		Diagramme d = new Diagramme("/home/armand/workspace/OptimNonLinTP4/bin/");
 		String s = "";
 		for (int i = 0; i < d.getTab().length; i++) {
 			for (int j = 0; j < d.getTab().length; j++) {

@@ -3,7 +3,18 @@ package coucheBasse;
 import java.util.ArrayList;
 
 public class Arbre extends ListeClasses implements RepresentationArbre {
-
+	private boolean estRacine;
+	private Arbre(boolean b){
+		this.estRacine=b;
+	}
+	public Arbre() {
+		super();
+		this.estRacine=true;
+	}
+	private void addFils(String s){
+		Arbre fils= new Arbre(false);
+		//TODO
+	}
 	@Override
 	public Class[] getClasses() {
 		// TODO Auto-generated method stub
