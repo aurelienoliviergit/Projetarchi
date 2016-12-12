@@ -5,6 +5,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Diagramme extends ListeClasses implements RepresentationGraph{
 
@@ -110,36 +111,55 @@ public class Diagramme extends ListeClasses implements RepresentationGraph{
 			s += "\n";
 		}
 		System.out.println(s);
-		for(int i=0;i<d.getClasses()[0].getMethods().length;i++){
-			System.out.println(d.getClasses()[0].getMethods()[i].getName());
+		for(int i=0;i<d.getClasses()[0].getFields().length;i++){
+			System.out.println(d.getPlusLongueChaineDeExtends()+"");
 		}
 		///*
-		System.out.println("--"+ d.getCleanMethods(0).length);
-		for(int i=0;i<d.getCleanMethods(0).length;i++){
-			System.out.println(d.getCleanMethods(0)[i].getName());
-		}//*/
+		
 	}
 
 	@Override
-	public int getExtends(int i) {
-		int toReturn=-1;
-		for(int p:this.getTab()[i]){
-			if(p==1){
-				toReturn=p;
+	public ArrayList<Integer> getExtends(int i) {
+		 ArrayList<Integer> toReturn=new ArrayList<>();
+			for(int p=0;p<this.getTab()[i].length;p++){
+				if(this.getTab()[i][p]==1){
+					toReturn.add(p);
+				}
 			}
-		}
-		return toReturn;
+			return toReturn;
 	}
 
 	@Override
 	public ArrayList<Integer> getImplements(int i) {
 		 ArrayList<Integer> toReturn=new ArrayList<>();
-		for(int p:this.getTab()[i]){
-			if(p==1){
-				toReturn.add(p);
+		 for(int p=0;p<this.getTab()[i].length;p++){
+				if(this.getTab()[i][p]==2){
+					toReturn.add(p);
+				}
 			}
-		}
 		return toReturn;
+	}
+
+	@Override
+	public ArrayList<Integer> getExtendedBy(int i) {
+		 HashSet<Integer> toReturn=new HashSet<>();
+		 for(int p=0;p<this.getTab()[i].length;p++){
+				if(this.getTab()[i][p]==1){
+					toReturn.addAll(this.getExtends(p));
+				}
+			}
+			return new ArrayList<>(toReturn);
+	}
+
+	@Override
+	public ArrayList<Integer> getImplementsBy(int i) {
+		 HashSet<Integer> toReturn=new HashSet<>();
+		 for(int p=0;p<this.getTab()[i].length;p++){
+				if(this.getTab()[i][p]==2){
+					toReturn.addAll(this.getExtends(p));
+				}
+			}
+		 return new ArrayList<>(toReturn);
 	}
 
 	
