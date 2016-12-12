@@ -9,7 +9,7 @@ import java.util.HashSet;
 
 public class Diagramme extends ListeClasses implements RepresentationGraph{
 
-	private int[][] tab;
+	private int[][] tab;//Represente la matrice du graph.
 	private Class[] noeuds;
 	public static final int Implement = 2;
 	public static final int Extends = 1;
@@ -85,6 +85,7 @@ public class Diagramme extends ListeClasses implements RepresentationGraph{
 		}
 		return c;
 	}
+	@Override
 	public int[][] getTab() {
 		return tab;
 	}

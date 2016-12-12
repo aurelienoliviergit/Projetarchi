@@ -84,12 +84,14 @@ public class Extraction extends ListeClasses implements IExtraction{
 
 		}
 		
+		@Override
 		public ArrayList<String> getNomClasse() {
 			return nomClasse;
 		}
 		public void setNomClasse(ArrayList<String> nomClasse) {
 			this.nomClasse = nomClasse;
 		}
+		@Override
 		public ArrayList<Path> getCheminClasse() {
 			return cheminClasse;
 		}

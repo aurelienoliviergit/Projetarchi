@@ -1,6 +1,5 @@
 package coucheBasse;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -32,11 +31,15 @@ public interface RepresentationProjet {
 	}
 
 	public static Method[] getCleanMethods(Class c) {
-		Method[] tab = c.getDeclaredMethods().clone();
-		return RepresentationProjet.process(tab).clone();
+		try {
+			Method[] tab = c.getDeclaredMethods().clone();
+			return RepresentationProjet.process(tab).clone();
 
+		} catch (NoClassDefFoundError e1) {
+			return new Method[0];
+		}
 	}
-
+	// Permet d'enlever les methodes de la classe Object que toute classe extends par defaut.
 	public static Method[] process(Method[] tab) {
 		ArrayList<String> methodsToRemove = new ArrayList<>();
 		methodsToRemove.add("wait");
@@ -64,7 +67,7 @@ public interface RepresentationProjet {
 		return tabClean;
 
 	}
-
+	//Methode utile pour le placement automatique des attributs sur une representation graphique
 	public default int getPlusLongueChaineDeExtends() {
 		int a = 0, max = 0, j;
 		HashSet<Integer> tabou = new HashSet<>();
