@@ -1,3 +1,5 @@
+package coucheHaute;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import coucheBasse.Diagramme;

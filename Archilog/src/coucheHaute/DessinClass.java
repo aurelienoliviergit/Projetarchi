@@ -1,3 +1,5 @@
+package coucheHaute;
+
 import coucheBasse.RepresentationProjet;
 
 public interface DessinClass {
