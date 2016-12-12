@@ -1,11 +1,18 @@
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Rectangle;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.RoundRectangle2D;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import org.jfree.graphics2d.svg.SVGGraphics2D;
+
+
+
 import coucheBasse.Diagramme;
 import coucheBasse.RepresentationProjet;
 
@@ -16,6 +23,9 @@ public class DessinSVG implements DessinClass, DessinLien{
 	private ArrayList<Integer> y;		//tableau des ordonnés  de tout les rectangles des classes 	
 	private ArrayList<Integer> dimX;	//tableau des dimension en abcisse de tout les rectangles des classes
 	private ArrayList<Integer> dimY;	//tableau des dimension en ordonné de tout les rectangles des classes
+	private boolean couleur;
+	private boolean epaisseur;
+	
 	
 	public SVGGraphics2D getGraph() {
 		return graph;
@@ -64,11 +74,12 @@ public class DessinSVG implements DessinClass, DessinLien{
 		this.y = new ArrayList<Integer>();
 		this.dimX = new ArrayList<Integer>();
 		this.dimY = new ArrayList<Integer>();
+		
 	}
 	
 	
 	
-// Dessine l'ensemble des classes	
+	// Dessine l'ensemble des classes	
 	public void dessinerClass(RepresentationProjet b){
         Scanner scan = new Scanner(System.in); //scanner pour demander les dimensions de la classe
         
@@ -88,11 +99,11 @@ public class DessinSVG implements DessinClass, DessinLien{
 	}
 
 	
-// Dessine une classe 
+	// Dessine une classe 
 	public void dessinerClass(Class b,int x, int y){
 		
-		int nbreAttribut = b.getFields().length; // nombre d'attribut dans la classe b
-		int nbreMethod = b.getMethods().length; 	 // nombre de méthodes dans la classe b
+		int nbreAttribut = b.getDeclaredFields().length; // nombre d'attribut dans la classe b
+		int nbreMethod = RepresentationProjet.getCleanMethods(b).length; 	 // nombre de méthodes dans la classe b
 		
 		int dimX = DessinSVG.pluslongmot(b)*7+20 ;		  // dimension en abcisse du rectangle de la classe b, on a ajouté 20 par soucis de clarté
 		this.getDimX().add(dimX);
@@ -100,7 +111,8 @@ public class DessinSVG implements DessinClass, DessinLien{
 		int dimY= nbreAttribut*12+nbreMethod*12+4*12; // dimension en ordonné du rectangle de la classe b, 12 étant taille du texte
 		this.getDimY().add(dimY);
 		
-		this.getGraph().draw(new Rectangle(x, y, dimX , dimY)); // dessin du rectangle
+		this.getGraph().setColor(Color.red);
+		this.getGraph().draw(new RoundRectangle2D.Double(x, y, dimX , dimY,10,10)); // dessin du rectangle
 		
 		int nbrElement = 1; //nbrElement est un repère pour savoir combien d'element on deja été dessiné dans le rectangle
 		this.getGraph().drawString(b.getName(), x+10, y +12*(nbrElement)); // écrire le nom de la méthode dans le cadre
@@ -109,38 +121,46 @@ public class DessinSVG implements DessinClass, DessinLien{
 		nbrElement++;
 		// ecrire dans le cadre de la classe b les attributs
 		for(int i = 0; i<nbreAttribut; i++){
-			this.getGraph().drawString(b.getFields()[i].getName() + ": " + b.getFields()[i].getType().getName(), x+10, y+12*(nbrElement));
+			this.getGraph().drawString(b.getDeclaredFields()[i].getName() + ": " + b.getDeclaredFields()[i].getType().getName(), x+10, y+12*(nbrElement));
 			nbrElement++;
 			
-			//b.getFields()[i].getType().getName()
+			if(i == nbreAttribut -1){
+				this.getGraph().drawLine(x,y +12*(nbrElement),x + dimX ,y +12*(nbrElement));
+				nbrElement++;
+			}
 		}
-		this.getGraph().drawLine(x,y +12*(nbrElement),x + dimX ,y +12*(nbrElement));
-		nbrElement++;
 		
 		// ecrire dans le cadre de la classe b les methodes
 		for(int i = 0; i<nbreMethod; i++){
-			this.getGraph().drawString(b.getMethods()[i].getName() + ": " + b.getMethods()[i].getReturnType().getName(), x+10, y+12*(nbrElement));
+			this.getGraph().drawString(RepresentationProjet.getCleanMethods(b)[i].getName() + ": " + RepresentationProjet.getCleanMethods(b)[i].getReturnType().getName(), x+10, y+12*(nbrElement));
 			nbrElement++;
 		}
 	}
 
-//Dessine les flèches entre les classes ayant des liens d'extends et d'implements	
+	//Dessine les flèches entre les classes ayant des liens d'extends et d'implements	
 	public void lier(RepresentationProjet d){
 		for(int i = 0; i< d.getClasses().length;i++){
 			
 			ArrayList<Integer> A = d.getImplements(i);
-			if(!A.isEmpty()){
+			while(!A.isEmpty()){
 				int [] t= this.pointLier(i, A.get(0));
+				this.getGraph().setPaint(Color.darkGray);
 				this.getGraph().drawLine(t[0], t[1], t[2], t[3]);
+				this.getGraph().draw(new Rectangle(t[2], t[3], 10,10));
+				A.remove(0);
 			}
-			if(d.getExtends(i)>(-1)){
-				int [] t= this.pointLier(i, d.getExtends(i));
+			ArrayList<Integer> B = d.getExtends(i);
+			while(!B.isEmpty()){
+				int [] t= this.pointLier(i, B.get(0));
+				this.getGraph().setPaint(Color.blue);
 				this.getGraph().drawLine(t[0], t[1], t[2], t[3]);
+				this.getGraph().draw(new Ellipse2D.Double(t[2], t[3], 10,10));
+				B.remove(0);
 			}
 		}	
 	}
 	
-// donne les coordonnées des 2 points à lier 
+	// donne les coordonnées des 2 points à lier 
 	public int[] pointLier(int i, int j){
 		int[] t = new int[4]; // tableau des coordonnées à lier
 		int deltaX = this.getX().get(i)-this.getX().get(j);
@@ -156,7 +176,7 @@ public class DessinSVG implements DessinClass, DessinLien{
 		int dimy2 = this.getDimY().get(j);
 		
 		if(Math.abs(deltaY) >= Math.abs(deltaX)){
-			if(deltaY<=0){
+			if(deltaY>=0){
 				t[0]=x1+dimx1/2;
 				t[1]=y1;
 				t[2]=x2+dimx2/2;
@@ -170,7 +190,7 @@ public class DessinSVG implements DessinClass, DessinLien{
 			}
 		}
 		else{
-			if(deltaX<=0){
+			if(deltaX<0){
 				t[0]=x1+dimx1;
 				t[1]=y1+dimy1/2;
 				t[2]=x2;
@@ -205,21 +225,6 @@ public class DessinSVG implements DessinClass, DessinLien{
 	}
 	
 	public static void main(String[] args) {
-		/*SVGGraphics2D g2 = new SVGGraphics2D(300, 200);
-		 g2.setPaint(Color.RED);
-		 g2.draw(new Rectangle(10, 10, 280, 180));
-		 g2.drawString("string",15 , 15);
-		 String svgElement = g2.getSVGElement();
-		
-		 
-		 DessinSVG d = new DessinSVG(500, 500, Color.BLUE);
-		 d.dessinerNomClass("nom");
-		 d.dessinerAttribut("A1");
-		 d.dessinerAttribut("A2");
-		 
-		 String svg = d.graph.getSVGElement();
-		 System.out.println( svg);
-		 */
 		
         Scanner scan = new Scanner(System.in); //scanner pour demander les dimensions de la classe
         System.out.println("Choisir des dimensions cohèrentes avec le diagramme");
@@ -229,7 +234,6 @@ public class DessinSVG implements DessinClass, DessinLien{
         int j = scan.nextInt();
       	DessinSVG d = new DessinSVG(i,j); //Dessine le cadre de taille (i,j)
 		Diagramme D = new Diagramme("/home/abel/workspace/fibonacci/bin/");
-		System.out.println(D.getClasses()[0].getName().length());
 		d.dessinerClass(D); //on dessine dans d l'ensemble des classes représentées par un objet de type Diagramme
 		d.lier(D);
 		System.out.println(d.getGraph().getSVGElement());
