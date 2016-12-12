@@ -32,15 +32,22 @@ public class Arbre extends ListeClasses implements RepresentationArbre {
 
 
 	@Override
-	public int getExtends(int i) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-
-	@Override
 	public ArrayList<Integer> getImplements(int i) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public ArrayList<Integer> getExtends(int i) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public ArrayList<Integer> getExtendedBy(int i) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public ArrayList<Integer> getImplementsBy(int i) {
 		// TODO Auto-generated method stub
 		return null;
 	}
